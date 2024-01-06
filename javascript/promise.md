@@ -7,6 +7,7 @@
 - 프로미스 중 하나라도 실패(reject)하면 모두 실패 처리 (다른 promise가 성공했을지라도)
 - 순서대로 실행되지만, 비동기적으로 진행
   - async-await와 다르게 앞의 promise가 `완료`되는 것을 기다리지 않아 빠름
+- 여러 response를 한번에 받을 수 있음
 
 ```javascript
 const getUserData = () => {
@@ -22,7 +23,7 @@ const getComapnyData = () => {
 }
 
 const fetchDatas = async () => {
-    const [userData, companyData] = await Promise.all([
+    const [userData, companyData] = await Promise.all([ // 여러 response 한번에 받기
         getUserData(),
         getCompanyData(),
     ])
