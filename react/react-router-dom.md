@@ -33,7 +33,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
 ### loader
 
-라우트가 활성화되기 전에 데이터를 가져와 컴포넌트에 전달한다.  
+라우트가 활성화되기 전에 데이터를 가져와 컴포넌트에 전달한다. (url이 바뀔 때마다 실행)
 `await` 을 통한 API 비동기 데이터 요청이 가능하다  
 데이터 로딩 로직을 라우트 설정에 포함시키기 때문에 컴포넌트 로직이 조금 더 간결해진다.
 
@@ -155,3 +155,11 @@ function SubmitButton() {
   - -1: 뒤로 가기
     - 취소 버튼시 활용 가능
   
+### useSubmit
+
+유저의 인터랙션 뿐만 아니라, form 제출 로직을 코드에 추가할 수 있다.
+예를 들면, Form tag 안의 input tag의 onChange 함수에 넣게되면, 키보드 입력할 때마다 제출이 가능하다.
+
+- replace
+    - 브라우저의 navigation history에 기록되는 설정에 대해 다룬다
+    - 기본적으로 push에 따라 새로운 항목으로 추가되지만, `true` 값일 경우 폼 제출 전의 페이지로 바로 이동하게 한다
