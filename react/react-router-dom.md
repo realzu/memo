@@ -3,13 +3,32 @@
 > v6.23.1  
 > 해당 버전 전후로 완전히 사용법이 바뀌었다.
 
+### createBrowserRouter
+
 ```javascript
-{
-  path: '/',
-  element: <Root />,
-  loader: rootLoader,
-  action: rootAction,
-}
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <Root />,
+        errorElement: <ErrorPage />,
+        loader: rootLoader,
+        action: rootAction,
+        children: [
+            { index: true, element: <Index /> },
+            {
+                path: 'contacts/:contactId',
+                element: <Contact />,
+                loader: contactLoader,
+            },
+        ]
+    },
+])
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <RouterProvider router={router}/>
+  </React.StrictMode>,
+)
 ```
 
 ### loader
@@ -62,3 +81,77 @@ export async function action() {
     return redirect(`/contacts/${contact.id}/edit`)
 }
 ```
+
+## Components
+
+### Form
+
+```javascript
+<Form action="edit">
+    <button type="submit">Edit</button>
+</Form>
+```
+
+- action
+  - Form이 실행될 때 넘어갈 Url 지정 (`<Link to>` 와 비슷하다)
+  - `/` 앞에 있으면 해당 도메인에 바로 붙여진다. (ex. `http://localhost:5173/contacts/02hczme/edit`)
+  - 없으면 현재 url에 이어서 덧붙여진다. (ex. `http://localhost:5173/edit`)
+- onSubmit
+  - action과 다르게 `event.preventDefault()` 이 필요하다
+- method
+  - 일반 HTML's form tag 도 마찬가지로 기본 동작은 'get'
+  - get은 Url 쿼리스트링으로 입력한 값이 들어가게 된다
+
+### NavLink
+
+```javascript
+<NavLink
+  to="/messages"
+  className={({ isActive, isPending, isTransitioning }) =>
+    [
+      isPending ? "pending" : "",
+      isActive ? "active" : "",
+      isTransitioning ? "transitioning" : "",
+    ].join(" ")
+  }
+>
+  Messages
+</NavLink>
+```
+
+- isActive: 현재 url 과 일치할 때 true
+- isPending: 라우트의 loader 함수가 아직 끝나지 않았을 때 true
+  - loading spinner 활용 가능
+- isTransitioning: 라우트 전환 중인 상태일 때 true
+  - 폼 제출 이후 페이지 전환 대기 시 '저장 중' 표시로 활용 가능
+
+## hooks
+
+### useNavigation
+
+```javascript
+function SubmitButton() {
+  const navigation = useNavigation();
+
+  const text =
+    navigation.state === "submitting"
+      ? "Saving..."
+      : navigation.state === "loading"
+      ? "Saved!"
+      : "Go";
+
+  return <button type="submit">{text}</button>;
+}
+```
+
+- state
+  - idle: 일반적인 상태. navigaion의 변화가 없을 떄
+  - submitting: form 제출이 일어날 때 action 진행시
+  - loading: 다음 페이지의 loader 가 일어날 때
+
+### useNavigate
+
+- navigate(value)
+  - -1: 뒤로 가기
+    - 취소 버튼시 활용 가능
+  
