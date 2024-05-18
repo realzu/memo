@@ -63,3 +63,15 @@ IP주소로도 사용 가능하지만 일반적으로 네임서버를 통해 변
 - 특정 요소 지정 가능 (일종의 '책갈피' 역할 -> 해당 지점의 콘텐츠 표시)
 - ex. id를 지정하면 해당 영역으로 바로 스크롤되어 이동
 - 서버로 전송되지 않는다는 점.
+
+---
+
+## new URL
+
+url 객체를 생성하거나 다루기 위한 API
+
+- searchParams
+  - new URL(request.url).searchParams
+  - url에 대한 파라미터 제공
+  - size, get, set()...
+  - new URLSearchParams 와 쿼리스트링을 다루는 부분은 같다
